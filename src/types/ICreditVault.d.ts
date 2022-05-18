@@ -22,12 +22,22 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface ICreditVaultInterface extends ethers.utils.Interface {
   functions: {
     "approveOnCreditDelegation(uint256)": FunctionFragment;
+    "getPositionAmount(uint256)": FunctionFragment;
+    "getPositionCreditor(uint256)": FunctionFragment;
     "returnCollateral(uint256,uint256)": FunctionFragment;
     "saveData(address,address,address,uint256,address,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "approveOnCreditDelegation",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionAmount",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionCreditor",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -51,6 +61,14 @@ interface ICreditVaultInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "approveOnCreditDelegation",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionCreditor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -111,6 +129,16 @@ export class ICreditVault extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     returnCollateral(
       _amount: BigNumberish,
       _counter: BigNumberish,
@@ -136,6 +164,16 @@ export class ICreditVault extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getPositionAmount(
+    _counter: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getPositionCreditor(
+    _counter: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   returnCollateral(
     _amount: BigNumberish,
     _counter: BigNumberish,
@@ -160,6 +198,16 @@ export class ICreditVault extends BaseContract {
       _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     returnCollateral(
       _amount: BigNumberish,
@@ -189,6 +237,16 @@ export class ICreditVault extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     returnCollateral(
       _amount: BigNumberish,
       _counter: BigNumberish,
@@ -213,6 +271,16 @@ export class ICreditVault extends BaseContract {
     approveOnCreditDelegation(
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     returnCollateral(

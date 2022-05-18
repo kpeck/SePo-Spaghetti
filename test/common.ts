@@ -1,4 +1,5 @@
 export const CHAINLINKfeedregistry = "0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf"
+export const ETHOSerc721deckwrapper = "0xA2052212075483D80cF268905203edC89A75bB29"
 export const WBTCcontract = "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
 export const WBTCwhale = "0xcffad3200574698b78f32232aa9d63eabd290703"
 export const DAIcontract = "0x6B175474E89094C44Da98b954EedeAC495271d0F"

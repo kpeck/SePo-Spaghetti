@@ -6,6 +6,7 @@ import { IERC20, SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/Saf
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
 import "@chainlink/contracts/src/v0.8/Denominations.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { DateTime } from "./libraries/DateTime.sol";
 
 
@@ -33,7 +34,8 @@ contract CreditVault is Ownable, DateTime{
     IAaveLendingPool public aaveLendingPool;
     IAaveDebtToken private aaveDebtTokenBtc;
     FeedRegistryInterface private registry;
-    uint256 private counter;
+    using Counters for Counters.Counter;
+    Counters.Counter private counter;    
     address private debitVault;
 
    
@@ -63,12 +65,21 @@ contract CreditVault is Ownable, DateTime{
         aaveLendingPool = IAaveLendingPool(_aaveLendingPool);
         aaveDebtTokenBtc = IAaveDebtToken(_aaveBtcStable);
         registry = FeedRegistryInterface(_registry);
-        counter=0;
+        counter.reset();
     }
 
     function setDebitVault(address _debitVault) public onlyOwner {
         debitVault=_debitVault;
     }
+    
+    function getPositionCreditor(uint256 _counter) public view returns (address) {
+        return positions[_counter].creditor;
+    }
+
+    function getPositionAmount(uint256 _counter) public view returns (uint256) {
+        return positions[_counter].amount;
+    }
+
 
     /**
      * @dev Deposit an amount of token on aave. Creditor Function.
@@ -123,24 +134,24 @@ contract CreditVault is Ownable, DateTime{
         IERC20(_collateral).safeTransferFrom(msg.sender, address(this), _amountCollateral);
 
         //saveDataOfThePosition
-        positions[counter].debitor = _debitor;
-        positions[counter].creditor= _creditor;
-        positions[counter].token = _token;
-        positions[counter].collateral = _collateral;
-        positions[counter].amount = _amount;
-        positions[counter].amountCollateral = _amountCollateral;
-        positions[counter].month = _month;
-        positions[counter].year = _year;
-        positions[counter].interest = _interest;
-        positions[counter].closed = false;
-        positions[counter].tokenized = false;
+        positions[counter.current()].debitor = _debitor;
+        positions[counter.current()].creditor= _creditor;
+        positions[counter.current()].token = _token;
+        positions[counter.current()].collateral = _collateral;
+        positions[counter.current()].amount = _amount;
+        positions[counter.current()].amountCollateral = _amountCollateral;
+        positions[counter.current()].month = _month;
+        positions[counter.current()].year = _year;
+        positions[counter.current()].interest = _interest;
+        positions[counter.current()].closed = false;
+        positions[counter.current()].tokenized = false;
 
         //change availability creditor TD change this in an amount and with oracles and ltv of aave save the amount lended
         creditLine[_creditor][_token].lended = true;
 
-        emit newPosition(counter, _debitor, _creditor, _token, _collateral, _amount, _amountCollateral, _month, _year);
+        emit newPosition(counter.current(), _debitor, _creditor, _token, _collateral, _amount, _amountCollateral, _month, _year);
         
-        counter++;
+        counter.increment();
 
     }
     
@@ -176,14 +187,15 @@ contract CreditVault is Ownable, DateTime{
         //check if the position is closed
         require(!positions[_counter].closed, "Position already closed");
 
-        
         //check with  if month and year are expired
         require(getYear(block.timestamp)>positions[_counter].year || (getYear(block.timestamp)==positions[_counter].year && getMonth(block.timestamp)>=positions[_counter].month),"Not yet maturated");
         
-        //take the collateral
-        IERC20(positions[_counter].collateral).safeTransfer(positions[_counter].creditor,positions[_counter].amountCollateral);
-
         //TD HERE THE CREDITOR WILL REPAY BY HIS OWN THE CREDIT DELEGATION ON AAVE
+
+        //TD HERE THE CREDITORS WILL REPAY THE CREDIT DELEGATION ON AAVE
+
+        //take the collateral 
+        IERC20(positions[_counter].collateral).safeTransfer(positions[_counter].creditor,positions[_counter].amountCollateral);
 
         //close the position
         positions[_counter].closed=true;

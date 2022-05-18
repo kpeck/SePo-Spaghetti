@@ -108,7 +108,9 @@ contract DebitVault is Ownable {
         IERC20(_token).safeTransferFrom(msg.sender, address(this), _amount);
         IERC20(_token).safeApprove(address(aaveLendingPool), _amount);
         aaveLendingPool.repay(_token, _amount, 1, address(creditVault)); //write the amount for work around because it's amountOnAave + interestOnAave. it is needed to obtain interests on aave
-        IERC20(_token).safeTransfer(_creditor, amountToCreditor); 
+        
+        IERC20(_token).safeTransfer(_creditor, amountToCreditor); //TO CREDITOR IF TOKENIZED=FALSE
+        // TD PAYMENT TO CREDITORS IF TOKENIZED = TRUE
 
         emit positionRepay(_counter,_creditor,msg.sender);
     }

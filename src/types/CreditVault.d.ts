@@ -29,6 +29,8 @@ interface CreditVaultInterface extends ethers.utils.Interface {
     "getHour(uint256)": FunctionFragment;
     "getMinute(uint256)": FunctionFragment;
     "getMonth(uint256)": FunctionFragment;
+    "getPositionAmount(uint256)": FunctionFragment;
+    "getPositionCreditor(uint256)": FunctionFragment;
     "getSecond(uint256)": FunctionFragment;
     "getWeekday(uint256)": FunctionFragment;
     "getYear(uint256)": FunctionFragment;
@@ -75,6 +77,14 @@ interface CreditVaultInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getMonth",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionAmount",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPositionCreditor",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -161,6 +171,14 @@ interface CreditVaultInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "getHour", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMinute", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMonth", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPositionCreditor",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getSecond", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getWeekday", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getYear", data: BytesLike): Result;
@@ -327,6 +345,16 @@ export class CreditVault extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number]>;
 
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     getSecond(
       timestamp: BigNumberish,
       overrides?: CallOverrides
@@ -462,6 +490,16 @@ export class CreditVault extends BaseContract {
 
   getMonth(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
+  getPositionAmount(
+    _counter: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getPositionCreditor(
+    _counter: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   getSecond(
     timestamp: BigNumberish,
     overrides?: CallOverrides
@@ -596,6 +634,16 @@ export class CreditVault extends BaseContract {
       timestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<number>;
+
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getSecond(
       timestamp: BigNumberish,
@@ -840,6 +888,16 @@ export class CreditVault extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getSecond(
       timestamp: BigNumberish,
       overrides?: CallOverrides
@@ -982,6 +1040,16 @@ export class CreditVault extends BaseContract {
 
     getMonth(
       timestamp: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPositionAmount(
+      _counter: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPositionCreditor(
+      _counter: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

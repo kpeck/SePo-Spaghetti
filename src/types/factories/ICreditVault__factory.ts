@@ -24,6 +24,44 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "_counter",
+        type: "uint256",
+      },
+    ],
+    name: "getPositionAmount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_counter",
+        type: "uint256",
+      },
+    ],
+    name: "getPositionCreditor",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "_amount",
         type: "uint256",
       },
